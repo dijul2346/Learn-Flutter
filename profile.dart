@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'main.dart';
 
 void main() {
   runApp(MyApp());
@@ -46,12 +47,11 @@ class ScreenProfile extends StatelessWidget {
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
                       decoration: InputDecoration(
-                        hintText: 'Type your name',
-                        hintStyle: (TextStyle(color: Colors.grey[700])),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(15))
-                        )
-                      ),
+                          hintText: 'Type your name',
+                          hintStyle: (TextStyle(color: Colors.grey[700])),
+                          border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15)))),
                     ),
                   ),
                 ),
@@ -68,12 +68,12 @@ class ScreenProfile extends StatelessWidget {
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
                       decoration: const InputDecoration(
-                        hintText: 'Type your Email',
-                        hintStyle: (TextStyle(color: Color.fromARGB(255,97,97, 97))),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(15))
-                        )
-                      ),
+                          hintText: 'Type your Email',
+                          hintStyle: (TextStyle(
+                              color: Color.fromARGB(255, 97, 97, 97))),
+                          border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15)))),
                     ),
                   ),
                 ),
@@ -84,19 +84,20 @@ class ScreenProfile extends StatelessWidget {
                 const Padding(
                   padding: EdgeInsets.all(8.0),
                   child: Text('Mobile'),
-                  ),
-                  Expanded(
+                ),
+                Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextFormField(
-                      decoration: const InputDecoration(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    decoration: const InputDecoration(
                         hintText: 'Type your Mobile Number',
-                        hintStyle: TextStyle(color: Color.fromARGB(255, 97, 97, 97)),
+                        hintStyle:
+                            TextStyle(color: Color.fromARGB(255, 97, 97, 97)),
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(15))
-                        )
-                      ),
-                    ),))
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(15)))),
+                  ),
+                ))
               ],
             ),
             Row(
@@ -104,30 +105,37 @@ class ScreenProfile extends StatelessWidget {
                 const Padding(
                   padding: EdgeInsets.all(8.0),
                   child: Text('Address'),
-                  ),
-                  Expanded(
+                ),
+                Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextFormField(
-                        decoration: const InputDecoration(
-                          hintText: 'Type your Address',
-                          hintStyle: TextStyle(color: Color.fromARGB(255, 97, 97, 97)),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(15))
-                          )
-                        ),
-                        maxLines: 5,
-                      ),))
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    decoration: const InputDecoration(
+                        hintText: 'Type your Address',
+                        hintStyle:
+                            TextStyle(color: Color.fromARGB(255, 97, 97, 97)),
+                        border: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(15)))),
+                    maxLines: 5,
+                  ),
+                ))
               ],
             ),
             Center(
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const ScreenStudentList()));
+                },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor:  Color.fromARGB(255, 208, 42, 42),
+                  backgroundColor: Color.fromARGB(255, 208, 42, 42),
                   foregroundColor: Colors.white,
                 ),
-                 child: Text('Submit'),),
+                child: Text('Submit'),
+              ),
             )
           ],
         ),
