@@ -14,74 +14,80 @@ class _ScreenTodoState extends State<ScreenTodo> {
     TodoModel(taskId: '2', taskName: 'B', taskStatus: '0'),
     TodoModel(taskId: '3', taskName: 'C', taskStatus: '0'),
     TodoModel(taskId: '4', taskName: 'D', taskStatus: '0'),
-    TodoModel(taskId: '5', taskName: 'E', taskStatus: '0')
+    TodoModel(taskId: '5', taskName: 'A', taskStatus: '0'),
+    TodoModel(taskId: '6', taskName: 'B', taskStatus: '0'),
+    TodoModel(taskId: '7', taskName: 'C', taskStatus: '0'),
+    TodoModel(taskId: '8', taskName: 'D', taskStatus: '0'),
   ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.grey[800],
         title: const Text(
-          'TodoApp',
+          "Todo APP",
           style: TextStyle(
               color: Colors.white, fontSize: 23, fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Colors.red,
+        leading: const Icon(
+          Icons.arrow_back_ios,
+          color: Colors.white,
+        ),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-              height: MediaQuery.of(context).size.height * .2,
-              child: Row(
-                children: [
-                  Expanded(
+          child: Column(
+        children: [
+          SizedBox(
+            height: MediaQuery.of(context).size.height * .1,
+            child: Row(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
+                      //controller: nameController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Employee ID Cannot be empty!';
+                          return 'Name Cannot be empty!';
                         } else {
                           return null;
                         }
                       },
-                      decoration: const InputDecoration(
-                          hintText: 'Enter Task',
-                          hintStyle: TextStyle(color: Colors.grey),
+                      decoration: InputDecoration(
+                          hintText: 'Add Task',
+                          hintStyle: TextStyle(
+                            color: Colors.grey[500],
+                          ),
                           border: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(15)))),
+                              borderRadius: BorderRadius.circular(10))),
                     ),
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                      // Action to perform when the button is pressed
-                      print('Submit button pressed');
-                    },
-                    child: Text('Submit'),
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 24, vertical: 12),
-                      textStyle: TextStyle(fontSize: 18),
-                    ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                    onPressed: () {},
+                    child: const Text("Add"),
                   ),
-                  Divider(),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * .6,
-                    child: ListView.builder(
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          leading: Text({index + 1}.toString()),
-                          title:Text(todoList[index].taskName),
-                        );
-                      },
-                      itemCount: todoList.length,
-                    ),
-                  )
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
+                ),
+              ],
+            ),
+          ),
+          const Divider(),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * .9,
+            child: ListView.builder(
+              itemBuilder: (context, index) {
+                return ListTile(
+                  leading: Text({index+1}.toString()),
+                  title: Text(todoList[index].taskName),
+                );
+              },
+              itemCount: todoList.length,
+            ),
+          )
+        ],
+      )),
     );
   }
 }
