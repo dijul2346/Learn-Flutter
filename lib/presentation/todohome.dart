@@ -9,16 +9,11 @@ class ScreenTodo extends StatefulWidget {
 }
 
 class _ScreenTodoState extends State<ScreenTodo> {
-  List<TodoModel> todoList = [
-    TodoModel(taskId: '1', taskName: 'A', taskStatus: '0'),
-    TodoModel(taskId: '2', taskName: 'B', taskStatus: '0'),
-    TodoModel(taskId: '3', taskName: 'C', taskStatus: '0'),
-    TodoModel(taskId: '4', taskName: 'D', taskStatus: '0'),
-    TodoModel(taskId: '5', taskName: 'A', taskStatus: '0'),
-    TodoModel(taskId: '6', taskName: 'B', taskStatus: '0'),
-    TodoModel(taskId: '7', taskName: 'C', taskStatus: '0'),
-    TodoModel(taskId: '8', taskName: 'D', taskStatus: '0'),
-  ];
+  List<TodoModel> todoList = [];
+  final todoController = TextEditingController();
+  int id = 0;
+  int editFlag = 0;
+  String editId = '0';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,7 +40,7 @@ class _ScreenTodoState extends State<ScreenTodo> {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
-                      //controller: nameController,
+                      controller: todoController,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Name Cannot be empty!';
@@ -66,8 +61,23 @@ class _ScreenTodoState extends State<ScreenTodo> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
-                    onPressed: () {},
-                    child: const Text("Add"),
+                    onPressed: () {
+                      addTask();
+                      TodoModel t = TodoModel(
+                          taskId: id.toString(),
+                          taskName: todoController.text,
+                          taskStatus: '0');
+                      id = id + 1;
+                      setState(() {
+                        todoList.add(t);
+                        editFlag == 0;
+                        editTask(editId, todoController.text);
+
+                      });
+
+                      
+                    },
+                    child: Text(editFlag == 0 ? 'Add' : 'Save'),
                   ),
                 ),
               ],
@@ -79,8 +89,39 @@ class _ScreenTodoState extends State<ScreenTodo> {
             child: ListView.builder(
               itemBuilder: (context, index) {
                 return ListTile(
-                  leading: Text({index+1}.toString()),
+                  onTap: () {
+                    changeStatus(todoList[index].taskId);
+                  },
+                  leading: Text({index + 1}.toString()),
                   title: Text(todoList[index].taskName),
+                  subtitle: Row(
+                    children: [
+                      Text(
+                        todoList[index].taskStatus == '0'
+                            ? 'Not Completed'
+                            : 'Completed',
+                        style: TextStyle(
+                            color: todoList[index].taskStatus == '0'
+                                ? Colors.red
+                                : Colors.green),
+                      ),
+                      Spacer(),
+                      IconButton(
+                          onPressed: () {
+                            setState(() {
+                              todoController.text = todoList[index].taskName;
+                              editFlag = 1;
+                              editId = todoList[index].taskId;
+                            });
+                          },
+                          icon: Icon(Icons.edit))
+                    ],
+                  ),
+                  trailing: IconButton(
+                      onPressed: () {
+                        deleteTask(todoList[index].taskId);
+                      },
+                      icon: Icon(Icons.delete)),
                 );
               },
               itemCount: todoList.length,
@@ -89,5 +130,33 @@ class _ScreenTodoState extends State<ScreenTodo> {
         ],
       )),
     );
+  }
+
+  void addTask() {}
+
+  void changeStatus(String id) {
+    setState(() {
+      for (var doc in todoList) {
+        if (doc.taskId == id) {
+          doc.taskStatus == '0' ? doc.taskStatus = '1' : doc.taskStatus = '0';
+        }
+      }
+    });
+  }
+
+  void deleteTask(String id) {
+    setState(() {
+      todoList.removeWhere((todo) => todo.taskId == id);
+    });
+  }
+
+  void editTask(String id, String taskName) {
+    setState(() {
+      for (var doc in todoList) {
+        if (doc.taskId == id) {
+          doc.taskName = taskName;
+        }
+      }
+    });
   }
 }
