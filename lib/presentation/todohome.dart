@@ -13,126 +13,117 @@ class _ScreenTodoState extends State<ScreenTodo> {
   final todoController = TextEditingController();
   int id = 0;
   int editFlag = 0;
-  String editId = '0';
+  late String editId;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.grey[800],
         title: const Text(
-          "Todo APP",
+          'Todo App',
           style: TextStyle(
-              color: Colors.white, fontSize: 23, fontWeight: FontWeight.bold),
+              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 23),
         ),
-        leading: const Icon(
-          Icons.arrow_back_ios,
-          color: Colors.white,
-        ),
+        backgroundColor: const Color.fromARGB(255, 35, 34, 34),
       ),
       body: SingleChildScrollView(
-          child: Column(
-        children: [
-          SizedBox(
-            height: MediaQuery.of(context).size.height * .1,
-            child: Row(
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextFormField(
-                      controller: todoController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Name Cannot be empty!';
-                        } else {
-                          return null;
-                        }
-                      },
-                      decoration: InputDecoration(
-                          hintText: 'Add Task',
-                          hintStyle: TextStyle(
-                            color: Colors.grey[500],
-                          ),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10))),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      addTask();
-                      TodoModel t = TodoModel(
-                          taskId: id.toString(),
-                          taskName: todoController.text,
-                          taskStatus: '0');
-                      id = id + 1;
-                      setState(() {
-                        todoList.add(t);
-                        editFlag == 0;
-                        editTask(editId, todoController.text);
-
-                      });
-
-                      
-                    },
-                    child: Text(editFlag == 0 ? 'Add' : 'Save'),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const Divider(),
-          SizedBox(
-            height: MediaQuery.of(context).size.height * .9,
-            child: ListView.builder(
-              itemBuilder: (context, index) {
-                return ListTile(
-                  onTap: () {
-                    changeStatus(todoList[index].taskId);
-                  },
-                  leading: Text({index + 1}.toString()),
-                  title: Text(todoList[index].taskName),
-                  subtitle: Row(
-                    children: [
-                      Text(
-                        todoList[index].taskStatus == '0'
-                            ? 'Not Completed'
-                            : 'Completed',
-                        style: TextStyle(
-                            color: todoList[index].taskStatus == '0'
-                                ? Colors.red
-                                : Colors.green),
+        child: Column(
+          children: [
+            SizedBox(
+              height: MediaQuery.of(context).size.height * .12,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                        child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                        controller: todoController,
                       ),
-                      Spacer(),
-                      IconButton(
-                          onPressed: () {
-                            setState(() {
-                              todoController.text = todoList[index].taskName;
-                              editFlag = 1;
-                              editId = todoList[index].taskId;
-                            });
-                          },
-                          icon: Icon(Icons.edit))
-                    ],
-                  ),
-                  trailing: IconButton(
-                      onPressed: () {
-                        deleteTask(todoList[index].taskId);
-                      },
-                      icon: Icon(Icons.delete)),
-                );
-              },
-              itemCount: todoList.length,
+                    )),
+                    ElevatedButton(
+                        onPressed: () {
+                          editFlag == 0
+                              ? addTask()
+                              : editTask(editId, todoController.text);
+                        },
+                        child: Text(editFlag == 0 ? 'Add' : 'Save')),
+                        Visibility(
+                          visible: editFlag == 1,
+                          child: ElevatedButton(
+                        onPressed: () {
+                          todoController.text = '';
+                        },
+                        child: const Text('X')))
+                  ],
+                ),
+              ),
             ),
-          )
-        ],
-      )),
+            const Divider(),
+            SizedBox(
+                height: MediaQuery.of(context).size.height * .8,
+                child: ListView.builder(
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      onTap: () {
+                        changeStatus(todoList[index].taskId);
+                      },
+                      leading: Text({index + 1}.toString()),
+                      title: Text(todoList[index].taskName),
+                      subtitle: Row(
+                        children: [
+                          Text(
+                            todoList[index].taskStatus == '0'
+                                ? 'Pending'
+                                : 'Completed',
+                            style: TextStyle(
+                                color: todoList[index].taskStatus == '0'
+                                    ? Colors.red
+                                    : Colors.green),
+                          ),
+                          const Spacer(),
+                          IconButton(
+                              onPressed: () {
+                                //deleteTask(todoList[index].taskId);
+                                setState(() {
+                                  editFlag = 1;
+                                  todoController.text =
+                                      todoList[index].taskName;
+                                  editId = todoList[index].taskId;
+                                });
+                              },
+                              icon: const Icon(Icons.edit)),
+                          IconButton(
+                              onPressed: () {
+                                deleteTask(todoList[index].taskId);
+                              },
+                              icon: const Icon(Icons.delete))
+                        ],
+                      ),
+                      // trailing: IconButton(
+                      //     onPressed: () {
+                      //       deleteTask(todoList[index].taskId);
+                      //     },
+                      //     icon: const Icon(Icons.delete)),
+                    );
+                  },
+                  itemCount: todoList.length,
+                ))
+          ],
+        ),
+      ),
     );
   }
 
-  void addTask() {}
+  void addTask() {
+    TodoModel t = TodoModel(
+        taskId: id.toString(), taskName: todoController.text, taskStatus: '0');
+    id = id + 1;
+    setState(() {
+      todoList.add(t);
+      todoController.text = '';
+    });
+  }
 
   void changeStatus(String id) {
     setState(() {
@@ -146,7 +137,7 @@ class _ScreenTodoState extends State<ScreenTodo> {
 
   void deleteTask(String id) {
     setState(() {
-      todoList.removeWhere((todo) => todo.taskId == id);
+      todoList.removeWhere((element) => element.taskId == id);
     });
   }
 
@@ -154,7 +145,12 @@ class _ScreenTodoState extends State<ScreenTodo> {
     setState(() {
       for (var doc in todoList) {
         if (doc.taskId == id) {
+          if (taskName.isEmpty) {
+          taskName = doc.taskName;
+         }
           doc.taskName = taskName;
+          editFlag = 0;
+          todoController.text = '';
         }
       }
     });
